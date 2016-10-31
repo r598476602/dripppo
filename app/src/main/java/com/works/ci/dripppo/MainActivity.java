@@ -1,8 +1,11 @@
 package com.works.ci.dripppo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -28,9 +31,19 @@ public class MainActivity extends AppCompatActivity {
         Type mapType = new TypeToken< ArrayList<Shot> >() {}.getType();
         ArrayList<Shot> listItem = gson.fromJson( response, mapType );
 
-        MyAdapter adapter = new MyAdapter(this, listItem);
+        final MyAdapter adapter = new MyAdapter(this, listItem);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Shot temp = (Shot)adapter.getItem(position);
+
+                Intent intent = new Intent(MainActivity.this, ShotInformation.class);
+                intent.putExtra("url", temp.getHtml_url());
+                startActivity(intent);
+            }
+        });
     }
 
 }
