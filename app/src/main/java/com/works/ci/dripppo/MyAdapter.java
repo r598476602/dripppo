@@ -36,7 +36,7 @@ public class MyAdapter extends BaseAdapter {
 
     public void refresh(ArrayList<Shot> mlist)
     {
-        items = mlist;
+        items.addAll(mlist);
         notifyDataSetChanged();
     }
 
