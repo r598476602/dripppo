@@ -67,17 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).start();
-/*
-        apiService apitest = new apiService();
-        String response = apitest.get("https://api.dribbble.com/v1/shots/?access_token=82b6a13113f4406633b6b7f44972a7a74fa4578fd3f08e4f92a80f65690fd004");
-
-        Gson gson = new Gson();
-        Type mapType = new TypeToken< ArrayList<Shot> >() {}.getType();
-        ArrayList<Shot> listItem = gson.fromJson( response, mapType );
-
-        final MyAdapter adapter = new MyAdapter(this, listItem);
-        listView.setAdapter(adapter);
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("url", temp.getHtml_url());
                 startActivity(intent);
             }
-        });*/
+        });
     }
 
 }
