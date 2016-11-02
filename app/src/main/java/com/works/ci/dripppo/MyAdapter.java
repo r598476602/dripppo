@@ -26,7 +26,7 @@ import java.util.Map;
 public class MyAdapter extends BaseAdapter {
 
     private final Context context;
-    private final ArrayList<Shot> items;
+    private ArrayList<Shot> items;
     private final Map<View, Map<Integer, View>> cache = new HashMap<View, Map<Integer, View>>();
 
     public MyAdapter(Context context, ArrayList<Shot> items) {
@@ -34,9 +34,18 @@ public class MyAdapter extends BaseAdapter {
         this.items = items;
     }
 
+    public void refresh(ArrayList<Shot> mlist)
+    {
+        items = mlist;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return items.size();
+        if(items != null)
+            return items.size();
+        else
+            return 0;
     }
 
     @Override
