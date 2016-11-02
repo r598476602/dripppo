@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private boolean isloading = false;
     private View footerView;
-
+    private int page = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case 0:
-                        Toast.makeText(getApplicationContext(), "footer", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "footer", Toast.LENGTH_SHORT).show();
                         listView.addFooterView(footerView);
                         break;
                     case 1:
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                if(view.getLastVisiblePosition() == totalItemCount-1 && myAdapter.getCount() >=10 && isloading == false){
+                if(view.getLastVisiblePosition() == totalItemCount-1 && myAdapter.getCount() >=10 && isloading == false ){
                     isloading = true;
                     Thread thread = new ThreadGetData();
                     thread.start();
@@ -115,10 +115,11 @@ public class MainActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(0);
 
                 apiService apitest = new apiService();
-                String response = apitest.get("https://api.dribbble.com/v1/shots/?access_token=82b6a13113f4406633b6b7f44972a7a74fa4578fd3f08e4f92a80f65690fd004");
+
+                String response = apitest.get("https://api.dribbble.com/v1/shots/?page="+page+"&"+getString(R.string.accessToken));
 
                 Thread.sleep(3000);
-
+                page++;
                 Message message = handler.obtainMessage(1, response);
                 handler.sendMessage(message);
             } catch (InterruptedException e) {
