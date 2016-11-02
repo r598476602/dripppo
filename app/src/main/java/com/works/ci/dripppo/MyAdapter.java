@@ -92,9 +92,13 @@ public class MyAdapter extends BaseAdapter {
             iv = (ImageView)itemMap.get(R.id.imageView);
         }
         Shot temp = (Shot) getItem(position);
-        likes_count.setText(String.valueOf(temp.getLikes_count()));
-        views_count.setText(String.valueOf(temp.getViews_count()));
-        comments_count.setText(String.valueOf(temp.getComments_count()));
+        String like, view, comment;
+        like = "Likes: "+String.valueOf(temp.getLikes_count());
+        view = "Views: "+String.valueOf(temp.getViews_count());
+        comment = "comments: "+String.valueOf(temp.getComments_count());
+        likes_count.setText(like);
+        views_count.setText(view);
+        comments_count.setText(comment);
         Glide.with(context).load(temp.getImages().getNormal()).into(iv);
 
 
