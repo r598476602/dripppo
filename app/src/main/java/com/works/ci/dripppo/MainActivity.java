@@ -2,6 +2,7 @@ package com.works.ci.dripppo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import com.works.ci.dripppo.Item.Shot;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isloading = false;
     private View footerView;
     private int page = 1;
+    private WaveSwipeRefreshLayout waveSwipeRefreshLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +49,18 @@ public class MainActivity extends AppCompatActivity {
         myAdapter = new MyAdapter(this, shotArrayList);
         listView.setAdapter(myAdapter);
 
-        //LayoutInflater li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //ftView = li.inflate(R.layout.footer_view, null);
         LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         footerView = layoutInflater.inflate(R.layout.shot_footer, null);
+
+        waveSwipeRefreshLayout = (WaveSwipeRefreshLayout)findViewById(R.id.main_swipe);
+        waveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                Thread thread = new ThreadGetData();
+                thread.start();
+            }
+        });
 
         handler = new Handler() {
 
@@ -63,7 +77,14 @@ public class MainActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         Type mapType = new TypeToken< ArrayList<Shot> >() {}.getType();
                         shotArrayList = gson.fromJson((String) msg.obj, mapType);
-                        myAdapter.refresh(shotArrayList);
+
+                        if (page==1)
+                            myAdapter.reload(shotArrayList);
+                        else
+                            myAdapter.refresh(shotArrayList);
+
+                        waveSwipeRefreshLayout.setRefreshing(false);
+                        page++;
                         isloading = false;
                         //Toast.makeText(getApplicationContext(), "loading", Toast.LENGTH_SHORT).show();
                         break;
@@ -119,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
                 String response = apitest.get("https://api.dribbble.com/v1/shots/?page="+page+"&"+getString(R.string.accessToken));
 
                 Thread.sleep(3000);
-                page++;
                 Message message = handler.obtainMessage(1, response);
                 handler.sendMessage(message);
             } catch (InterruptedException e) {
@@ -128,5 +148,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
 
 }
