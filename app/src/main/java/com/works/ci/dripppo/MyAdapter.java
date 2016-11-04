@@ -34,6 +34,12 @@ public class MyAdapter extends BaseAdapter {
         this.items = items;
     }
 
+    public void reload(ArrayList<Shot> mlist)
+    {
+        items = mlist;
+        notifyDataSetChanged();
+    }
+
     public void refresh(ArrayList<Shot> mlist)
     {
         items.addAll(mlist);
