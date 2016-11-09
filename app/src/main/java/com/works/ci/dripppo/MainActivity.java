@@ -4,11 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenu;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -37,12 +44,23 @@ public class MainActivity extends AppCompatActivity {
     private View footerView;
     private int page = 1;
     private WaveSwipeRefreshLayout waveSwipeRefreshLayout;
-
+    private Toolbar toolbar;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initToolBar();
+
+        navigationView = (NavigationView)findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                return false;
+            }
+        });
+
 
         listView= (ListView)findViewById(R.id.listView);
         shotArrayList = new ArrayList<Shot>();
@@ -127,6 +145,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return  true;
+    }
+
+
+
+
+    public void initToolBar()
+    {
+        toolbar = (Toolbar)findViewById(R.id.activity_main_toolbar);
+        setTitle("Dripppo");
+        toolbar.setLogo(R.mipmap.dribbble_ball);
+        setSupportActionBar(toolbar);
     }
 
     public class ThreadGetData extends Thread{
